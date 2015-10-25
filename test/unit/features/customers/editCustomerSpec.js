@@ -3,7 +3,7 @@ describe('When I visit the customer list page.', function() {
     beforeEach(module('CustomerModule'));
     beforeEach(module('CustomerControllersModule'));
 
-    describe("And the user adds a new customer", function(){
+    describe("And the user edits an existing customer", function(){
         function fakeModelInstanceProvider(isSuccess, result){
           this.create = function(){
             var _success, _error;
@@ -37,7 +37,7 @@ describe('When I visit the customer list page.', function() {
           };
         }
 
-      describe("And the customer is successfully created", function(){
+      describe("And the customer is successfully saved", function(){
         var ctrl, modalCtrl, scope, modalScope, $httpBackend, fakeModal, fakeModalInstance;
         var customers = [
           { id: 1, name: 'Joe' }, 
@@ -45,7 +45,7 @@ describe('When I visit the customer list page.', function() {
 
         beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
           var customer = {
-            id: 3,
+            id: 2,
             name: "Paul"
           };
           $httpBackend = _$httpBackend_;
@@ -63,12 +63,12 @@ describe('When I visit the customer list page.', function() {
           modalCtrl = $controller('SetCustomerModalCtrl', { $scope: modalScope, $uibModalInstance: fakeModalInstance, customer: undefined })
         }));
 
-        it("Adds the new customer to the first in the list", function(){
-          scope.addCustomer();
+        it("Then updates the customer in the list", function(){
+          scope.editCustomer(customers[1]);
           modalScope.ok();
           $httpBackend.flush();
 
-          expect(scope.customers[0].id).to.equal(3);
+          expect(scope.customers[1].name).to.equal("Paul");
         });
 
          afterEach(function() {
@@ -77,16 +77,16 @@ describe('When I visit the customer list page.', function() {
          });
 
         it("Then a success message is displayed to the user", function(){
-          scope.addCustomer();
+          scope.editCustomer(customers[1]);
           modalScope.ok();
           $httpBackend.flush();
 
           expect(scope.alerts.data[0].type).to.equal("success");
-          expect(scope.alerts.data[0].message).to.equal("Customer successfully created.");
+          expect(scope.alerts.data[0].message).to.equal("Customer successfully saved.");
         });
       });
 
-      describe("And the customer is NOT created", function(){
+      describe("And the customer is NOT saved", function(){
         var ctrl, modalCtrl, scope, modalScope, $httpBackend, fakeModal, fakeModalInstance;
         var customers = [
           { id: 1, name: 'Joe' }, 
@@ -94,7 +94,7 @@ describe('When I visit the customer list page.', function() {
 
         beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
           var customer = {
-            id: 3,
+            id: 2,
             name: "Paul"
           };
           $httpBackend = _$httpBackend_;
@@ -121,7 +121,7 @@ describe('When I visit the customer list page.', function() {
          });
 
         it("Then an error message is displayed to the user", function(){
-          scope.addCustomer();
+          scope.editCustomer(customers[1]);
           modalScope.ok();
           $httpBackend.flush();
 
