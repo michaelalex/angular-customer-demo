@@ -52,7 +52,7 @@ customerControllerModule.controller('CustomerListCtrl', ['$scope', '$uibModal', 
   	function onAddCustomerSuccess(result){
 		if (result.success){
 			$scope.customers.unshift(result.customer);
-			$scope.alerts.addSuccessAlert('Customers successfully created.');
+			$scope.alerts.addSuccessAlert('Customer successfully created.');
 		}
 		else {
 			$scope.alerts.addErrorAlert(result.error);
